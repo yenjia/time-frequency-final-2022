@@ -1,32 +1,31 @@
+import json
 import os
 from typing import Any, Sequence
-import json
+
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.nn import CrossEntropyLoss
-from torch.optim import AdamW, Adam
-from torch.optim.lr_scheduler import CosineAnnealingLR
-# from monai.data import DataLoader, Dataset, CacheDataset
-from torch.utils.data import Dataset, DataLoader
-from sklearn.metrics import accuracy_score
-from torchvision.models import (densenet121,
-                                swin_t,
-                                resnet50,
-                                vit_b_16)
-from pytorch_lightning import LightningModule, LightningDataModule
-from transforms import train_transforms, val_transforms
-from models.wavevit import wavevit_s, wavevit_b
+from models.wavevit import wavevit_s
+from models.wresnet import wresnet50
 from pl_bolts.optimizers.lr_scheduler import LinearWarmupCosineAnnealingLR
+from pytorch_lightning import LightningDataModule, LightningModule
+from sklearn.metrics import accuracy_score
+from torch.nn import CrossEntropyLoss
+from torch.optim import Adam, AdamW
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from torch.utils.data import DataLoader, Dataset
+from torchvision.models import densenet121, resnet50, swin_t, vit_b_16
+from transforms import train_transforms, val_transforms
+
 
 def get_model(name):
     supported_model = {
-        "densenet": densenet121(weights="IMAGENET1K_V1"),
-        "swin_t":swin_t(weights="IMAGENET1K_V1"),
-        "wavevit_s": wavevit_s(pretrained=True),
-        "wavevit_b": wavevit_b(pretrained=True),
-        "resnet50": resnet50(weights="IMAGENET1K_V1"),
-        "vit": vit_b_16(weights="IMAGENET1K_V1"),
+        "densenet": densenet121(),
+        "swin_t":swin_t(),
+        "wavevit_s": wavevit_s(),
+        "resnet50": resnet50(),
+        "wresnet50": wresnet50(),
+        "vit": vit_b_16(),
     }
     return supported_model[name.lower()]
 
@@ -84,7 +83,7 @@ class LitModel(LightningModule):
         self.linear = nn.Linear(config["model"]["backbone_num_features"], config["model"]["num_classes"])
         self.loss_function = get_loss(config["loss"])
 
-    def forward(self, x : torch.Tensor) :
+    def forward(self, x: torch.Tensor) :
         feats = self.model(x)
         y = self.linear(feats)
         return feats, y
@@ -174,8 +173,8 @@ class DataModule(LightningDataModule):
         train_files  = data_list["training"]
         val_files = data_list["validation"]
 
-        self.train_ds = get_dataset(datalist=train_files, transform = train_transforms(**self.transforms_config))
-        self.val_ds = get_dataset(datalist=val_files, transform = val_transforms(**self.transforms_config))
+        self.train_ds = get_dataset(datalist=train_files, transform=train_transforms(**self.transforms_config))
+        self.val_ds = get_dataset(datalist=val_files, transform=val_transforms(**self.transforms_config))
 
     def train_dataloader(self):
         return DataLoader(self.train_ds,
