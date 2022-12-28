@@ -1,5 +1,5 @@
 import torch.nn as nn
-from DWT_IDWT.DWT_IDWT_layer import *
+from .DWT_IDWT.DWT_IDWT_layer import *
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d']
@@ -210,7 +210,7 @@ class ResNet(nn.Module):
         return x
 
 
-def resnet18(wavename = 'haar', pool_only=True, **kwargs):
+def wresnet18(wavename = 'haar', pool_only=True, **kwargs):
     """Constructs a ResNet-18 model.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
@@ -219,7 +219,7 @@ def resnet18(wavename = 'haar', pool_only=True, **kwargs):
     return model
 
 
-def resnet34(wavename = 'haar', pool_only=True, **kwargs):
+def wresnet34(wavename = 'haar', pool_only=True, **kwargs):
     """Constructs a ResNet-34 model.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
@@ -228,7 +228,7 @@ def resnet34(wavename = 'haar', pool_only=True, **kwargs):
     return model
 
 
-def resnet50(wavename = 'haar', pool_only=True, **kwargs):
+def wresnet50(wavename = 'haar', pool_only=True, **kwargs):
     """Constructs a ResNet-50 model.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
@@ -237,7 +237,7 @@ def resnet50(wavename = 'haar', pool_only=True, **kwargs):
     return model
 
 
-def resnet101(wavename = 'haar', pool_only=True, **kwargs):
+def wresnet101(wavename = 'haar', pool_only=True, **kwargs):
     """Constructs a ResNet-101 model.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
@@ -246,7 +246,7 @@ def resnet101(wavename = 'haar', pool_only=True, **kwargs):
     return model
 
 
-def resnet152(wavename = 'haar', pool_only=True, **kwargs):
+def wresnet152(wavename = 'haar', pool_only=True, **kwargs):
     """Constructs a ResNet-152 model.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
@@ -255,14 +255,14 @@ def resnet152(wavename = 'haar', pool_only=True, **kwargs):
     return model
 
 
-def resnext50_32x4d(wavename = 'haar', pool_only=True, **kwargs):
+def wresnext50_32x4d(wavename = 'haar', pool_only=True, **kwargs):
     model = ResNet(Bottleneck, [3, 4, 6, 3], groups=4, width_per_group=32, wavename = wavename, pool_only=pool_only, **kwargs)
     # if pretrained:
     #     model.load_state_dict(model_zoo.load_url(model_urls['resnet50']))
     return model
 
 
-def resnext101_32x8d(wavename = 'haar', pool_only=True, **kwargs):
+def wresnext101_32x8d(wavename = 'haar', pool_only=True, **kwargs):
     model = ResNet(Bottleneck, [3, 4, 23, 3], groups=8, width_per_group=32, wavename = wavename, pool_only=pool_only, **kwargs)
     # if pretrained:
     #     model.load_state_dict(model_zoo.load_url(model_urls['resnet50']))
