@@ -4,7 +4,7 @@ from torch.nn import Module
 from .DWT_IDWT_Functions import *
 import pywt
 
-__all__ = ['DWT_2D', 'IDWT_2D', 'DWT_2D_tiny']
+__all__ = ['DWT_2D_tiny']
 
 class DWT_2D_tiny(Module):
     """
