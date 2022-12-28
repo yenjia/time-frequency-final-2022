@@ -1,4 +1,4 @@
 #!/bin/bash
 
-CUDA_VISIBLE_DEVICES=0,1 \
+CUDA_VISIBLE_DEVICES=0 \
 python ../src/train.py -c $@
