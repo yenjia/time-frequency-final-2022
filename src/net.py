@@ -18,14 +18,14 @@ from torchvision.models import densenet121, resnet50, swin_t, vit_b_16
 from transforms import train_transforms, val_transforms
 
 
-def get_model(name):
+def get_model(name, weights=None):
     supported_model = {
-        "densenet": densenet121(),
-        "swin_t":swin_t(),
+        "densenet": densenet121(weights=weights),
+        "swin_t":swin_t(weights=weights),
         "wavevit_s": wavevit_s(),
-        "resnet50": resnet50(),
+        "resnet50": resnet50(weights=weights),
         "wresnet50": wresnet50(),
-        "vit": vit_b_16(),
+        "vit": vit_b_16(weights=weights),
     }
     return supported_model[name.lower()]
 
@@ -78,7 +78,7 @@ class LitModel(LightningModule):
     def __init__(self, config):
         super(LitModel, self).__init__()
         self.save_hyperparameters()
-        self.model = get_model(config["model"]["backbone"].lower())
+        self.model = get_model(config["model"]["backbone"].lower(), config["model"].get("weights", None))
         
         self.linear = nn.Linear(config["model"]["backbone_num_features"], config["model"]["num_classes"])
         self.loss_function = get_loss(config["loss"])

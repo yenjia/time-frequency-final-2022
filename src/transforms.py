@@ -96,6 +96,8 @@ class Noised(BaseTransform):
         elif self.mode == "s&p":
             img = random_noise(single_data, mode=self.mode, amount=self.impluse[self.severty])
             return torch.from_numpy(img)
+        else:
+            raise SyntaxError(f"The {self.mode} mode is currently not supported.")
 
 
 def train_transforms(**transforms_config):

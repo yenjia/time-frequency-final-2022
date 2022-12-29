@@ -10,6 +10,7 @@ class DWTFunction_2D_tiny(Function):
         return LL
     @staticmethod
     def backward(ctx, grad_LL):
+        grad_LL = grad_LL.float()
         matrix_Low_0, matrix_Low_1, matrix_High_0, matrix_High_1 = ctx.saved_variables
         grad_L = torch.matmul(grad_LL, matrix_Low_1.t())
         grad_input = torch.matmul(matrix_Low_0.t(), grad_L)
