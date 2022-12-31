@@ -1,0 +1,30 @@
+name: wavevit_s
+savepath: v0
+epoches: 100
+strategy: ddp
+accumulate_batches: 8
+precision: 16
+gradient_clip_val: 5.0
+data_config:
+  batch_size: 32
+  val_batch_size: 64
+  dataroot: /neodata/pathology_breast/caltech/256_ObjectCategories/
+  datalist: /neodata/pathology_breast/caltech/project/prepare/datalist.json
+  cache: false
+  transforms_config:
+    img_size: 224
+    random_transform: false
+model_config:
+  model:
+    num_classes: 256
+    backbone: wavevit_s
+    backbone_num_features: 1000
+  loss: FL
+  optimizer: adamw
+  lr: 0.0001
+  scheduler:
+    name: warmcosine
+    warmup_epochs: 5
+    max_epochs: 100
+    eta_min: 0
+ckpt: ../checkpoint/v0/wavevit_s/acc.ckpt
